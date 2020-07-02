@@ -9,7 +9,7 @@ import (
 )
 
 type Model struct {
-	Sw, Sh     int
+	Sw, Sh, Vw, Vh int
 	Scale      float64
 	Background Color
 	Target     *image.RGBA
@@ -41,6 +41,8 @@ func NewModel(target image.Image, background Color, size, numWorkers int) *Model
 	model := &Model{}
 	model.Sw = sw
 	model.Sh = sh
+	model.Vw = sw / int(scale)
+	model.Vh = sh / int(scale)
 	model.Scale = scale
 	model.Background = background
 	model.Target = imageToRGBA(target)
@@ -86,7 +88,7 @@ func (model *Model) Frames(scoreDelta float64) []image.Image {
 func (model *Model) SVG() string {
 	bg := model.Background
 	var lines []string
-	lines = append(lines, fmt.Sprintf("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"%d\" height=\"%d\">", model.Sw, model.Sh))
+	lines = append(lines, fmt.Sprintf("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"%d\" height=\"%d\" viewBox=\"0 0 %d %d\">", model.Sw, model.Sh, model.Vw, model.Vh))
 	lines = append(lines, fmt.Sprintf("<rect x=\"0\" y=\"0\" width=\"%d\" height=\"%d\" fill=\"#%02x%02x%02x\" />", model.Sw, model.Sh, bg.R, bg.G, bg.B))
 	lines = append(lines, fmt.Sprintf("<g transform=\"scale(%f) translate(0.5 0.5)\">", model.Scale))
 	for i, shape := range model.Shapes {
