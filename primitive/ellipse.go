@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/janslonecki/gg"
+	"github.com/fogleman/gg"
 	"github.com/golang/freetype/raster"
 )
 
